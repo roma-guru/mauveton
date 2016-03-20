@@ -1,0 +1,5 @@
+This is console audio player for VKontakte inpired by [badtaste][https://github.com/ewnd9/badtaste].
+
+How to get token:
+http://oauth.vk.com/authorize?client_id=&scope=audio,wall&redirect_uri=http://oauth.vk.com/blank.html&display=popup&response_type=token
+Copypaste token from url to application as -t param.

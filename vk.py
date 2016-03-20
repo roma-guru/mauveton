@@ -1,7 +1,6 @@
 import  os,requests
 
 base_url = "https://api.vk.com/method/%s"
-download_dir = os.environ["HOME"]+"/Music/Mauveton"
 
 def get_audios(owner_id, offset, count, token):
 	url = base_url % "audio.get"
@@ -9,12 +8,9 @@ def get_audios(owner_id, offset, count, token):
 	resp = requests.get(url, params=params, timeout=3).json()
 	return resp["response"]["items"]
 
-def download(url, owner, name):
-	mp3 = requests.get(url, timeout=3).content
-	owner_dir = download_dir+os.sep+get_name(owner)
-	os.makedirs(owner_dir)
-	with open(owner_dir+os.sep+name,"wb") as f:
-		f.write(mp3)
+def download(url, path):
+	with open(path, "wb") as f:
+		f.write(requests.get(url, timeout=3).content)
 
 def get_name(owner_id):
 	if owner_id < 0:
