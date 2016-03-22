@@ -22,8 +22,8 @@ if __name__ == "__main__":
         play_wall(vkid, token)
     elif ns.audios_owner and ns.access_token:
         vkid = ns.audios_owner
-	token = ns.access_token
+        token = ns.access_token
         play_audios(vkid, token)
     else:
-	print("\033[0;37;41mNo Arguments!\033[0m")
-	parser.print_usage()
+        print("\033[0;37;41mNo Arguments!\033[0m")
+        parser.print_usage()

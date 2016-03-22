@@ -1,8 +1,6 @@
 import subprocess, time, sys, os
 from vk import get_audios,download,get_name
 
-base_dir = os.environ["HOME"]+"/Music/Mauveton"
-
 def play_wall(owner_id, token):
     try:
         while True:
@@ -15,16 +13,16 @@ def play_audios(owner_id, token):
         for a in get_audios(owner_id, 0, 10, token):
             artist = a["artist"]; title = a["title"]
             print("Now playing: %s - %s"% (artist, title))
-	    path = get_path(get_name(owner_id), a)
-	    if not os.path.exists(path):
-	        download(a["url"], path)
-	    play_file(path)
+            path = get_path(get_name(owner_id), a)
+            if not os.path.exists(path):
+                download(a["url"], path)
+            play_file(path)
 
     except KeyboardInterrupt:
         print("Bye! Listen to the good music & heal your soul...")
 
 def play_file(path):
-    subprocess.call([get_mpg123(),'-C',path])
+    subprocess.call([get_mpg123(),path])
 
 def is_linux():
     return sys.platform.startswith("linux")
@@ -46,3 +44,11 @@ def get_path(owner, a):
     if not os.path.exists(dir):
         os.makedirs(dir)
     return os.path.join(dir, "%s - %s.mp3" % (artist,title))
+
+def get_home():
+    if is_linux():
+        return os.environ["HOME"]
+    elif is_windows():
+        return os.environ["HOMEPATH"]
+
+base_dir = os.path.join(get_home(),"Music","Mauveton")
