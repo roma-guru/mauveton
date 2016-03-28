@@ -12,9 +12,9 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Play VK music", prog='mauveton')
     parser.add_argument('-w','--wall', dest='wall_owner', type=int)
-    parser.add_argument('-a','--audios', dest='audios_owner', type=int)
-    parser.add_argument('-t','--token', dest='access_token', type=str)
-    parser.add_argument('--noplay', dest='no_play', action='store_true')
+    parser.add_argument('-a','--audios', dest='audios_owner', type=int, help="user/group id to play their audios")
+    parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission")
+    parser.add_argument('--noplay', dest='no_play', action='store_true', help="save playlist only, don't play it")
     
     ns = parser.parse_args()
 

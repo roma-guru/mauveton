@@ -1,6 +1,10 @@
 import subprocess, time, sys, os
 from vk import get_audios,download,get_name
 
+if sys.version_info.major<3:
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
 def play_wall(owner_id, token):
     try:
         while True:
@@ -12,11 +16,14 @@ def create_playlist(owner_id, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading playlist from VK")
     with open(playlist,"w") as f:
+        f.write("#EXTM3U\n\n")
         for a in get_audios(owner_id, 0, 0, token):
             url = a["url"]
             url = url[:url.index("?")]
-
             artist = a["artist"]; title = a["title"]
+            duration = a["duration"]
+
+            f.write("#EXTINF:%d, %s - %s\n" % (duration,artist,title))
             f.write("%s\n" % url)
     return playlist
 
