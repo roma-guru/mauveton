@@ -49,6 +49,6 @@ def get_home():
     if is_linux():
         return os.environ["HOME"]
     elif is_windows():
-        return os.environ["HOMEPATH"]
+        return os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"])
 
 base_dir = os.path.join(get_home(),"Music","Mauveton")
