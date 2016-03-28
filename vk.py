@@ -1,16 +1,56 @@
 import requests
+import operator
+from functools import reduce
+from time import sleep
 
 base_url = "https://api.vk.com/method/%s"
 
+def get_wall_audios(owner_id, offset, count, token):
+    MAX_POSTS = 100
+    audios = []
+    for i in range(offset, offset+count, MAX_POSTS):
+        posts = get_posts(owner_id, i, min(count,MAX_POSTS), token)
+        sleep(0.3)
+        audios += reduce(operator.add,map(extract_audios_from_post, posts))
+    return audios
+
+def extract_audios_from_post(post):
+    audios = []
+    if not "attachments" in post: return audios
+    attaches = post["attachments"]
+    if attaches:
+        for a in attaches:
+            if a["type"]=="audio":
+                audios.append(a["audio"])
+    return audios
+
+def get_posts_count(owner_id, token):
+    assert type(owner_id) in (str,int)
+    assert type(token) in (str,)
+    url = base_url % "wall.get"
+    params = {"v":"5.37","owner_id":owner_id,"offset":0,"count":1,"access_token":token}
+    resp = requests.get(url, params=params, timeout=10).json()
+    return resp["response"]["count"]
+
+def get_posts(owner_id, offset, count, token):
+    assert type(owner_id) in (str,int)
+    assert type(token) in (str,)
+    url = base_url % "wall.get"
+    params = {"v":"5.37","owner_id":owner_id,"offset":offset,"count":count,"access_token":token}
+    resp = requests.get(url, params=params, timeout=10).json()
+    return resp["response"]["items"]
+
 def get_audios(owner_id, offset, count, token):
+    assert type(owner_id) in (str,int)
+    assert type(token) in (str,)
     url = base_url % "audio.get"
     params = {"v":"5.37","owner_id":owner_id,"offset":offset,"count":count,"access_token":token}
     resp = requests.get(url, params=params, timeout=10).json()
     return resp["response"]["items"]
 
 def download(url, path):
-    assert type(url) in (str)
-    assert type(path) in (str)
+    assert type(url) in (str,)
+    assert type(path) in (str,)
     with open(path, "wb") as f:
         f.write(requests.get(url, timeout=3).content)
 

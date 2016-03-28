@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 
-from player import play_wall, play_list, create_playlist
+from player import play_list, create_playlist_from_wall, create_playlist_from_audios
 if __name__ == "__main__":
     
     try: 
@@ -14,8 +14,8 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="Play VK music from walls and audio lists of users/communities.", prog='mauveton')
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-w','--wall', dest='wall_owner', type=str)
-    group.add_argument('-a','--audios', dest='audios_owner', type=str, help="user/group id to play their audios")
+    group.add_argument('-w','--wall', dest='wall_owner', type=int, help="user/group id to play audios from their wall")
+    group.add_argument('-a','--audios', dest='audios_owner', type=int, help="user/group id to play their audios")
     parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission", required=True)
     parser.add_argument('--noplay', dest='no_play', action='store_true', help="save playlist only, don't play it")
     
@@ -24,11 +24,13 @@ if __name__ == "__main__":
     if ns.wall_owner and ns.access_token:
         vkid = ns.wall_owner
         token = ns.access_token
-        play_wall(vkid, token)
+        playlist = create_playlist_from_wall(vkid, token)
+        if not ns.no_play:
+            play_list(playlist)
     elif ns.audios_owner and ns.access_token:
         vkid = ns.audios_owner
         token = ns.access_token
-        playlist = create_playlist(vkid, token)
+        playlist = create_playlist_from_audios(vkid, token)
         if not ns.no_play:
             play_list(playlist)
     else:

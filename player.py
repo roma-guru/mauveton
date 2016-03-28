@@ -1,32 +1,34 @@
 import sys, os
-from vk import get_audios,download,get_name
+from vk import get_audios,get_wall_audios,download,get_name
 
 if sys.version_info[0] < 3:
     import codecs
     _open_func_bak = open # Make a back up, just in case
     open = codecs.open
 
-def play_wall(owner_id, token):
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        print("Bye! Listen to the good music & heal your soul...")
-
-def create_playlist(owner_id, token):
+def create_playlist_from_audios(owner_id, token):
     playlist = "%s.m3u" % get_name(owner_id)
-    print("Loading playlist from VK")
+    print("Loading audios from VK")
+    write_m3u(playlist, get_audios(owner_id, 0, 0, token))
+    return playlist
+
+def create_playlist_from_wall(owner_id, token):
+    playlist = "%s.m3u" % get_name(owner_id)
+    print("Loading wall audios from VK")
+    write_m3u(playlist, get_wall_audios(owner_id, 0, 500, token))
+    return playlist
+
+def write_m3u(playlist,audios):
     with open(playlist,"w",encoding="utf-8") as f:
         f.write("#EXTM3U\n\n")
-        for a in get_audios(owner_id, 0, 0, token):
+        for a in audios:
             url = a["url"]
-            url = url[:url.index("?")]
+            url = url[:url.index("?")] if "?" in url else url
             artist = a["artist"]; title = a["title"]
             duration = a["duration"]
 
             f.write("#EXTINF:%d, %s - %s\n" % (duration,artist,title))
             f.write("%s\n" % url)
-    return playlist
 
 def play_list(path):
     print("Starting playback")
