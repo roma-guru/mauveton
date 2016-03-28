@@ -9,8 +9,8 @@ def play_wall(owner_id, token):
         print("Bye! Listen to the good music & heal your soul...")
 
 def play_audios(owner_id, token):
-    try:
-        for a in get_audios(owner_id, 0, 10, token):
+    for a in get_audios(owner_id, 0, 10, token):
+        try:
             artist = a["artist"]; title = a["title"]
             print("Now playing: %s - %s"% (artist, title))
             path = get_path(get_name(owner_id), a)
@@ -18,17 +18,23 @@ def play_audios(owner_id, token):
                 download(a["url"], path)
             play_file(path)
 
-    except KeyboardInterrupt:
-        print("Bye! Listen to the good music & heal your soul...")
+        except KeyboardInterrupt:
+            print("Bye! Listen to the good music & heal your soul...")
+            return
+        except UnicodeError:
+            pass
+
 
 def play_file(path):
-    subprocess.call([get_mpg123(),path])
+    #subprocess.call([get_mpg123(),path])
+    a=os.system("%s \"%s\"" % (get_mpg123(),path) )
+    print("ended with exit code %d" % a)
 
 def is_linux():
     return sys.platform.startswith("linux")
 
 def is_windows():
-    return sys.platform.startswith("win")
+    return sys.platform.startswith("win") or sys.platform.startswith("cygwin")
 
 def get_mpg123():
     base = "mpg123"
@@ -50,5 +56,7 @@ def get_home():
         return os.environ["HOME"]
     elif is_windows():
         return os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"])
+    raise Error("Unsupported platform")
+
 
 base_dir = os.path.join(get_home(),"Music","Mauveton")
