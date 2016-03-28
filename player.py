@@ -8,22 +8,22 @@ def play_wall(owner_id, token):
     except KeyboardInterrupt:
         print("Bye! Listen to the good music & heal your soul...")
 
-def play_audios(owner_id, token):
-    for a in get_audios(owner_id, 0, 10, token):
-        try:
+def create_playlist(owner_id, token):
+    playlist = "%s.m3u" % get_name(owner_id)
+    print("Loading playlist from VK")
+    with open(playlist,"w") as f:
+        for a in get_audios(owner_id, 0, 0, token):
+            url = a["url"]
+            url = url[:url.index("?")]
+
             artist = a["artist"]; title = a["title"]
-            print("Now playing: %s - %s"% (artist, title))
-            path = get_path(get_name(owner_id), a)
-            if not os.path.exists(path):
-                download(a["url"], path)
-            play_file(path)
+            f.write("%s\n" % url)
+    return playlist
 
-        except KeyboardInterrupt:
-            print("Bye! Listen to the good music & heal your soul...")
-            return
-        except UnicodeError:
-            pass
-
+def play_list(path):
+    print("Starting playback")
+    code=os.system("%s -@ \"%s\"" % (get_mpg123(),path) )
+    print("ended with exit code %d" % code)
 
 def play_file(path):
     #subprocess.call([get_mpg123(),path])

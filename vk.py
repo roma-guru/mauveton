@@ -5,7 +5,7 @@ base_url = "https://api.vk.com/method/%s"
 def get_audios(owner_id, offset, count, token):
     url = base_url % "audio.get"
     params = {"v":"5.37","owner_id":owner_id,"offset":offset,"count":count,"access_token":token}
-    resp = requests.get(url, params=params, timeout=3).json()
+    resp = requests.get(url, params=params, timeout=10).json()
     return resp["response"]["items"]
 
 def download(url, path):

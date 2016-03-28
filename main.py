@@ -2,7 +2,7 @@
 import sys,requests
 import argparse
 
-from player import play_wall, play_audios
+from player import play_wall, play_list, create_playlist
 if __name__ == "__main__":
     
     print("""\033[0;32;40m .*-.      .-'.      .-@-.      .--.      .@-.      .--.      .*-.      .--.
@@ -14,6 +14,8 @@ if __name__ == "__main__":
     parser.add_argument('-w','--wall', dest='wall_owner', type=int)
     parser.add_argument('-a','--audios', dest='audios_owner', type=int)
     parser.add_argument('-t','--token', dest='access_token', type=str)
+    parser.add_argument('--noplay', dest='no_play', action='store_true')
+    
     ns = parser.parse_args()
 
     if ns.wall_owner and ns.access_token:
@@ -23,7 +25,9 @@ if __name__ == "__main__":
     elif ns.audios_owner and ns.access_token:
         vkid = ns.audios_owner
         token = ns.access_token
-        play_audios(vkid, token)
+        playlist = create_playlist(vkid, token)
+        if not ns.no_play:
+            play_list(playlist)
     else:
         print("\033[0;37;41mNo Arguments!\033[0m")
         parser.print_usage()
