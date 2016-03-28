@@ -1,9 +1,10 @@
 import subprocess, time, sys, os
 from vk import get_audios,download,get_name
 
-if sys.version_info.major<3:
-    reload(sys)
-    sys.setdefaultencoding('utf8')
+if sys.version_info[0] < 3:
+    import codecs
+    _open_func_bak = open # Make a back up, just in case
+    open = codecs.open
 
 def play_wall(owner_id, token):
     try:
@@ -15,7 +16,7 @@ def play_wall(owner_id, token):
 def create_playlist(owner_id, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading playlist from VK")
-    with open(playlist,"w") as f:
+    with open(playlist,"w",encoding="utf-8") as f:
         f.write("#EXTM3U\n\n")
         for a in get_audios(owner_id, 0, 0, token):
             url = a["url"]
