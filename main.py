@@ -12,10 +12,11 @@ if __name__ == "__main__":
     except:
         print("\033[1;37;41mYour terminal sucks\033[0m - \033[1;37;40mno fancy Unicode support =(\033[0m")
     
-    parser = argparse.ArgumentParser(description="Play VK music", prog='mauveton')
-    parser.add_argument('-w','--wall', dest='wall_owner', type=int)
-    parser.add_argument('-a','--audios', dest='audios_owner', type=int, help="user/group id to play their audios")
-    parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission")
+    parser = argparse.ArgumentParser(description="Play VK music from walls and audio lists of users/communities.", prog='mauveton')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-w','--wall', dest='wall_owner', type=str)
+    group.add_argument('-a','--audios', dest='audios_owner', type=str, help="user/group id to play their audios")
+    parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission", required=True)
     parser.add_argument('--noplay', dest='no_play', action='store_true', help="save playlist only, don't play it")
     
     ns = parser.parse_args()

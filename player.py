@@ -1,4 +1,4 @@
-import subprocess, time, sys, os
+import sys, os
 from vk import get_audios,download,get_name
 
 if sys.version_info[0] < 3:
