@@ -1,5 +1,5 @@
 import sys, os
-from vk import get_audios,get_wall_audios,download,get_name
+from vk import get_audios,get_wall_audios,download,get_name,get_id
 
 if sys.version_info[0] < 3:
     import codecs
@@ -9,13 +9,13 @@ if sys.version_info[0] < 3:
 def create_playlist_from_audios(owner_id, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading audios from VK")
-    write_m3u(playlist, get_audios(owner_id, 0, 0, token))
+    write_m3u(playlist, get_audios(get_id(owner_id), 0, 0, token))
     return playlist
 
 def create_playlist_from_wall(owner_id, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading wall audios from VK")
-    write_m3u(playlist, get_wall_audios(owner_id, 0, 500, token))
+    write_m3u(playlist, get_wall_audios(get_id(owner_id), 0, 500, token))
     return playlist
 
 def write_m3u(playlist,audios):
