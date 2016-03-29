@@ -11,7 +11,9 @@ def get_wall_audios(owner_id, offset, count, token):
     for i in range(offset, offset+count, MAX_POSTS):
         posts = get_posts(owner_id, i, min(count,MAX_POSTS), token)
         sleep(0.3)
-        audios += reduce(operator.add,map(extract_audios_from_post, posts))
+        extracted = map(extract_audios_from_post, posts)
+        if extracted:
+            audios += reduce(operator.add, extracted)
     return audios
 
 def extract_audios_from_post(post):
