@@ -23,6 +23,7 @@ def write_m3u(playlist,audios):
         f.write("#EXTM3U\n\n")
         for a in audios:
             url = a["url"]
+            url = url.replace("https","http")
             url = url[:url.index("?")] if "?" in url else url
             artist = a["artist"]; title = a["title"]
             duration = a["duration"]
