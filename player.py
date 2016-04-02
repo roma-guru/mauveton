@@ -6,16 +6,16 @@ if sys.version_info[0] < 3:
     _open_func_bak = open # Make a back up, just in case
     open = codecs.open
 
-def create_playlist_from_audios(owner_id, token):
+def create_playlist_from_audios(owner_id, offset, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading audios from VK")
-    write_m3u(playlist, get_audios(get_id(owner_id), 0, 0, token))
+    write_m3u(playlist, get_audios(get_id(owner_id), offset, 0, token))
     return playlist
 
-def create_playlist_from_wall(owner_id, token):
+def create_playlist_from_wall(owner_id, offset, token):
     playlist = "%s.m3u" % get_name(owner_id)
     print("Loading wall audios from VK")
-    write_m3u(playlist, get_wall_audios(get_id(owner_id), 0, 500, token))
+    write_m3u(playlist, get_wall_audios(get_id(owner_id), offset, 500, token))
     return playlist
 
 def write_m3u(playlist,audios):

@@ -21,18 +21,20 @@ if __name__ == "__main__":
     group.add_argument('-w','--wall', dest='wall_owner', type=str, help="user/group id to play audios from their wall")
     group.add_argument('-a','--audios', dest='audios_owner', type=str, help="user/group id to play their audios")
     parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission", required=True)
+    parser.add_argument('-o','--offset', dest='offset', type=int, help="Offset (# of audios for -a, # of posts for -w)", default=0)
     parser.add_argument('--noplay', dest='no_play', action='store_true', help="save playlist only, don't play it")
     
     ns = parser.parse_args()
 
     token = ns.access_token
+    offset = ns.offset
     if ns.wall_owner and token:
         vkid = int(ns.wall_owner) if is_num(ns.wall_owner) else ns.wall_owner
-        playlist = create_playlist_from_wall(vkid, token)
+        playlist = create_playlist_from_wall(vkid, offset, token)
         if not ns.no_play:
             play_list(playlist)
     elif ns.audios_owner and token:
         vkid = int(ns.audios_owner) if is_num(ns.audios_owner) else ns.audios_owner
-        playlist = create_playlist_from_audios(vkid, token)
+        playlist = create_playlist_from_audios(vkid, offset, token)
         if not ns.no_play:
             play_list(playlist)
