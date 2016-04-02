@@ -86,3 +86,4 @@ ENV/
 
 *.m3u
 *.mp3
+*.sublime-*
