@@ -67,7 +67,7 @@ def get_home():
         return os.environ["HOME"]
     elif is_windows():
         return os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"])
-    raise Error("Unsupported platform")
+    raise Exception("Unsupported platform")
 
 
 base_dir = os.path.join(get_home(),"Music","Mauveton")
