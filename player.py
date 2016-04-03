@@ -1,5 +1,5 @@
 import sys, os
-from vk import get_audios,get_wall_audios,download,get_name,get_id
+from vk import get_audios,get_wall_audios,get_name,get_id
 
 if sys.version_info[0] < 3:
     import codecs
@@ -32,14 +32,10 @@ def write_m3u(playlist,audios):
             f.write("%s\n" % url)
 
 def play_list(path):
-    print("Starting playback")
-    code=os.system("%s -@ \"%s\"" % (get_mpg123(),path) )
-    print("ended with exit code %d" % code)
+    os.system("%s -@ \"%s\"" % (get_mpg123(),path) )
 
 def play_file(path):
-    #subprocess.call([get_mpg123(),path])
-    a=os.system("%s \"%s\"" % (get_mpg123(),path) )
-    print("ended with exit code %d" % a)
+    os.system("%s \"%s\"" % (get_mpg123(),path) )
 
 def is_linux():
     return sys.platform.startswith("linux")
@@ -54,20 +50,9 @@ def get_mpg123():
     elif is_windows():
         return os.path.join(base,"win32","mpg123.exe")
 
-def get_path(owner, a):
-    artist = a["artist"]
-    title = a["title"]
-    dir = os.path.join(base_dir, owner)
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-    return os.path.join(dir, "%s - %s.mp3" % (artist,title))
-
 def get_home():
     if is_linux():
         return os.environ["HOME"]
     elif is_windows():
         return os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"])
     raise Exception("Unsupported platform")
-
-
-base_dir = os.path.join(get_home(),"Music","Mauveton")
