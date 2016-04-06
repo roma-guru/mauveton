@@ -8,17 +8,18 @@ if sys.version_info[0] < 3:
 
 def create_playlist_from_audios(owner_id, offset, token):
     playlist = "%s.m3u" % get_name(owner_id)
-    print("Loading audios from VK")
+    info("Loading audios from VK")
     write_m3u(playlist, get_audios(get_id(owner_id), offset, 0, token))
     return playlist
 
 def create_playlist_from_wall(owner_id, offset, token):
     playlist = "%s.m3u" % get_name(owner_id)
-    print("Loading wall audios from VK")
+    info("Loading wall audios from VK")
     write_m3u(playlist, get_wall_audios(get_id(owner_id), offset, 500, token))
     return playlist
 
 def write_m3u(playlist,audios):
+    info("Writing m3u playlist")
     with open(playlist,"w",encoding="utf-8") as f:
         f.write("#EXTM3U\n\n")
         for a in audios:
@@ -56,3 +57,6 @@ def get_home():
     elif is_windows():
         return os.path.join(os.environ["HOMEDRIVE"], os.environ["HOMEPATH"])
     raise Exception("Unsupported platform")
+
+def info(msg):
+   print("\033[0;37;42m%s\033[0m" % msg)
