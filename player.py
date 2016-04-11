@@ -33,6 +33,8 @@ def write_m3u(playlist,audios):
             f.write("%s\n" % url)
 
 def play_list(path):
+    info("Playing m3u playlist")
+    print("\n")
     os.system("%s -@ \"%s\"" % (get_mpg123(),path) )
 
 def play_file(path):
