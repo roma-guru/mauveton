@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 
-from player import play_list, create_playlist_from_wall, create_playlist_from_audios
+from player import play_list, create_playlist_from_wall, create_playlist_from_audios, create_playlist_from_search
 
 def is_num(s):
     return s.replace('-','').isdigit()
@@ -21,6 +21,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-w','--wall', dest='wall_owner', type=str, help="user/group id to play audios from their wall")
     group.add_argument('-a','--audios', dest='audios_owner', type=str, help="user/group id to play their audios")
+    group.add_argument('-s','--search', dest='search_str', type=str, help="Search string")       
     parser.add_argument('-t','--token', dest='access_token', type=str, help="VK access token with audio permission", required=True)
     parser.add_argument('-o','--offset', dest='offset', type=int, help="Offset (# of audios for -a, # of posts for -w)", default=0)
     parser.add_argument('--noplay', dest='no_play', action='store_true', help="save playlist only, don't play it")
@@ -40,5 +41,12 @@ if __name__ == "__main__":
             playlist = create_playlist_from_audios(vkid, offset, token)
             if not ns.no_play:
                 play_list(playlist)
+        elif ns.search_str and token:
+            MAX_SEARCH_COUNT = 200
+            playlist = create_playlist_from_search(ns.search_str, offset, MAX_SEARCH_COUNT, token)
+            if not ns.no_play:
+                play_list(playlist)
+
     except KeyboardInterrupt:
         print("\033[0;37;42mGood Bye! Listen to the good music..\033[0m")
+ 

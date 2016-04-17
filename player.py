@@ -1,5 +1,5 @@
 import sys, os
-from vk import get_audios,get_wall_audios,get_name,get_id
+from vk import get_audios,get_wall_audios,get_name,get_id,get_found_audios
 
 if sys.version_info[0] < 3:
     import codecs
@@ -18,6 +18,12 @@ def create_playlist_from_wall(owner_id, offset, token):
     write_m3u(playlist, get_wall_audios(get_id(owner_id), offset, 500, token))
     return playlist
 
+def create_playlist_from_search(search_string, offset, count, token):
+    playlist = "%s.m3u" % search_string
+    info("Loading audios from VK")
+    write_m3u(playlist, get_found_audios(search_string, offset, count, token))
+    return playlist
+    
 def write_m3u(playlist,audios):
     info("Writing m3u playlist")
     with open(playlist,"w",encoding="utf-8") as f:

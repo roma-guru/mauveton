@@ -59,6 +59,15 @@ def get_audios(owner_id, offset, count, token):
     check_error(resp)
     return resp["response"]["items"]
 
+def get_found_audios(search_string, offset, count, token):
+    assert type(search_string) in (str,)
+    assert type(token) in (str,)
+    url = base_url % "audio.search"
+    params = {"v":"5.37","q":search_string ,"offset":offset,"count":count,"access_token":token}
+    resp = requests.get(url, params=params, timeout=10).json()
+    check_error(resp)
+    return resp["response"]["items"]
+
 def download(url, path):
     assert type(url) in (str,)
     assert type(path) in (str,)
