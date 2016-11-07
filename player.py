@@ -46,12 +46,19 @@ def is_linux():
 def is_windows():
     return sys.platform.startswith("win") or sys.platform.startswith("cygwin")
 
+def is_mac():
+    return sys.platform.startswith("darwin")
+
 def get_mpg123():
     base = "mpg123"
     if is_linux():
         return os.path.join(base,"linux64","mpg123")
     elif is_windows():
         return os.path.join(base,"win32","mpg123.exe")
+    elif is_mac():
+        return os.path.join(base,"macosx64","mpg123")
+    else:
+        raise Exception("Unknown sys platform!")
 
 def get_home():
     if is_linux():

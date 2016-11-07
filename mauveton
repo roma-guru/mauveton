@@ -1,4 +1,8 @@
 #!/bin/sh
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
+
 realpath=$(realpath $0)
 cd $(dirname $realpath)
 python main.py $@
